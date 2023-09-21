@@ -1,9 +1,14 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.group(() => {
-  Route.post('auth/register', 'AuthController.register')
-  Route.post('auth/login', 'AuthController.login')
+  Route.group(() => {
+    Route.post('register', 'AuthController.register')
+    Route.post('login', 'AuthController.login')
+  }).prefix('auth')
 
-  Route.post('threads', 'ThreadsController.store').middleware('auth')
-  Route.get('threads/:id', 'ThreadsController.show')
+  Route.group(() => {
+    Route.post('', 'ThreadsController.store').middleware('auth')
+    Route.get('', 'ThreadsController.index')
+    Route.get(':id', 'ThreadsController.show')
+  }).prefix('threads')
 }).prefix('api')

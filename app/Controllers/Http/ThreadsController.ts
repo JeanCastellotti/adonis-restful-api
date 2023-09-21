@@ -16,10 +16,16 @@ export default class ThreadsController {
   }
 
   @bind()
-  public async show({}: HttpContextContract, thread: Thread) {
+  public async show({}, thread: Thread) {
     await thread.load('user')
     await thread.load('category')
 
     return thread
+  }
+
+  public async index() {
+    const threads = await Thread.query().preload('category').preload('user')
+
+    return threads
   }
 }
