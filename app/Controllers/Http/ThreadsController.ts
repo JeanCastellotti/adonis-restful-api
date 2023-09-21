@@ -1,4 +1,6 @@
+import { bind } from '@adonisjs/route-model-binding'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Thread from 'App/Models/Thread'
 import ThreadValidator from 'App/Validators/ThreadValidator'
 
 export default class ThreadsController {
@@ -9,6 +11,14 @@ export default class ThreadsController {
 
     await thread?.load('user')
     await thread?.load('category')
+
+    return thread
+  }
+
+  @bind()
+  public async show({}: HttpContextContract, thread: Thread) {
+    await thread.load('user')
+    await thread.load('category')
 
     return thread
   }
