@@ -10,5 +10,6 @@ Route.group(() => {
     Route.post('', 'ThreadsController.store').middleware('auth')
     Route.get('', 'ThreadsController.index')
     Route.get(':id', 'ThreadsController.show')
+    Route.patch(':id', 'ThreadsController.update')
   }).prefix('threads')
 }).prefix('api')
