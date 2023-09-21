@@ -1,5 +1,6 @@
 import { bind } from '@adonisjs/route-model-binding'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import UnauthorizedException from 'App/Exceptions/UnauthorizedException'
 import Thread from 'App/Models/Thread'
 import CreateThreadValidator from 'App/Validators/CreateThreadValidator'
 import SortThreadValidator from 'App/Validators/SortThreadValidator'
@@ -54,8 +55,12 @@ export default class ThreadsController {
   }
 
   @bind()
-  public async update({ request }: HttpContextContract, thread: Thread) {
+  public async update({ request, auth }: HttpContextContract, thread: Thread) {
     const payload = await request.validate(UpdateThreadValidator)
+
+    if (auth.user?.id !== thread.userId) {
+      throw new UnauthorizedException('You can only edit your own threads.')
+    }
 
     thread.merge(payload)
     await thread.save()
@@ -68,7 +73,11 @@ export default class ThreadsController {
   }
 
   @bind()
-  public async destroy({}, thread: Thread) {
+  public async destroy({ auth }: HttpContextContract, thread: Thread) {
+    if (auth.user?.id !== thread.userId) {
+      throw new UnauthorizedException('You can only delete your own threads.')
+    }
+
     return await thread.delete()
   }
 }
