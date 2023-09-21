@@ -11,5 +11,6 @@ Route.group(() => {
     Route.get('', 'ThreadsController.index')
     Route.get(':id', 'ThreadsController.show')
     Route.patch(':id', 'ThreadsController.update')
+    Route.delete(':id', 'ThreadsController.destroy')
   }).prefix('threads')
 }).prefix('api')

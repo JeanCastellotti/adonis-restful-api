@@ -42,4 +42,9 @@ export default class ThreadsController {
 
     return thread
   }
+
+  @bind()
+  public async destroy({}, thread: Thread) {
+    return await thread.delete()
+  }
 }
