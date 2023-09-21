@@ -6,12 +6,15 @@ Route.group(() => {
     Route.post('login', 'AuthController.login')
   }).prefix('auth')
 
-  Route.group(() => {
-    Route.post('', 'ThreadsController.store').middleware('auth')
-    Route.get('', 'ThreadsController.index')
-    Route.get(':id', 'ThreadsController.show')
-    Route.patch(':id', 'ThreadsController.update')
-    Route.delete(':id', 'ThreadsController.destroy')
-    Route.post(':id/replies', 'RepliesController.store').middleware('auth')
-  }).prefix('threads')
+  Route.resource('threads', 'ThreadsController').apiOnly().middleware({
+    store: 'auth',
+    update: 'auth',
+    destroy: 'auth',
+  })
+
+  Route.resource('threads.replies', 'RepliesController')
+    .only(['store'])
+    .middleware({
+      store: 'auth',
+    })
 }).prefix('api')
