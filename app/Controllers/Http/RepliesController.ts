@@ -5,7 +5,10 @@ import { bind } from '@adonisjs/route-model-binding'
 
 export default class RepliesController {
   @bind()
-  public async store({ request, auth }: HttpContextContract, thread: Thread) {
+  public async store(
+    { request, auth, response }: HttpContextContract,
+    thread: Thread
+  ) {
     const { content } = await request.validate(CreateReplyValidator)
 
     const reply = await thread
@@ -15,6 +18,6 @@ export default class RepliesController {
     await reply.load('user')
     await reply.load('thread')
 
-    return reply
+    return response.created({ data: reply })
   }
 }
