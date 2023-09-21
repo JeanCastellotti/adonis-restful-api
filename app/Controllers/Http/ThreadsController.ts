@@ -25,11 +25,15 @@ export default class ThreadsController {
     return thread
   }
 
-  public async index() {
+  public async index({ request }: HttpContextContract) {
+    const page = request.input('page', 1)
+    const perPage = request.input('per_page', 25)
+
     const threads = await Thread.query()
       .preload('category')
       .preload('user')
       .preload('replies')
+      .paginate(page, perPage)
 
     return threads
   }
