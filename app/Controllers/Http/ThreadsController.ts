@@ -20,12 +20,16 @@ export default class ThreadsController {
   public async show({}, thread: Thread) {
     await thread.load('user')
     await thread.load('category')
+    await thread.load('replies')
 
     return thread
   }
 
   public async index() {
-    const threads = await Thread.query().preload('category').preload('user')
+    const threads = await Thread.query()
+      .preload('category')
+      .preload('user')
+      .preload('replies')
 
     return threads
   }
@@ -39,6 +43,7 @@ export default class ThreadsController {
 
     await thread.load('user')
     await thread.load('category')
+    await thread.load('replies')
 
     return thread
   }
